@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import sys
+
 reload(sys)
 sys.setdefaultencoding('utf8')
 
@@ -9,15 +10,17 @@ from scrapy.http import Request
 from urlparse import urljoin
 from datetime import datetime
 from web.items import ArticleItem
-from scrapy.loader import ItemLoader
+from web.items import ArticleItemLoader
+
 
 class JobboleSpider(scrapy.Spider):
     name = 'jobbole'
     allowed_domains = ['jobbole.com']
     start_urls = ['http://www.jobbole.com']
+
     # start_urls = ['http://python.jobbole.com/all-posts']
 
-    #拼接出所有的URL地址
+    # 拼接出所有的URL地址
     def parse(self, response):
         urls = response.xpath('//li[@class="menu-item"]/a/@href').extract()
         for url in urls:
@@ -41,22 +44,25 @@ class JobboleSpider(scrapy.Spider):
 
     def parse_details(self, response):
         article_item = ArticleItem()
-        article_item['article_img'] = [response.meta.get("article_img", "")]
-        article_item['title'] = response.xpath('//div[@class="entry-header"]/h1/text()').extract_first()
-        article_item['article_url'] = response.url
-        create_time = response.xpath(
-            '//p[@class="entry-meta-hide-on-mobile"]/text()').extract()[0].replace("·", "").strip()
-        # create_time = response.css('p.entry-meta-hide-on-mobile').extract_first().strip().replace("·", "")
-        try:
-            article_item['create_time'] = datetime.strptime(create_time, "%Y/%m/%d").date()
-        except Exception as e:
-            article_item['create_time'] = datetime.now()
-        # article_item['article_content'] = response.xpath("div.entry").extract()[0]
-        article_item['article_content'] = response.xpath('//div[@class="entry"]').extract()[0]
+        # article_item['article_img'] = [response.meta.get("article_img", "")]
+        # article_item['title'] = response.xpath('//div[@class="entry-header"]/h1/text()').extract_first()
+        # article_item['article_url'] = response.url
+        # create_time = response.xpath(
+        #     '//p[@class="entry-meta-hide-on-mobile"]/text()').extract()[0].replace("·", "").strip()
+        # # create_time = response.css('p.entry-meta-hide-on-mobile').extract_first().strip().replace("·", "")
+        # try:
+        #     article_item['create_time'] = datetime.strptime(create_time, "%Y/%m/%d").date()
+        # except Exception as e:
+        #     article_item['create_time'] = datetime.now().date()
+        # # article_item['article_content'] = response.xpath("div.entry").extract()[0]
+        # article_item['article_content'] = response.xpath('//div[@class="entry"]').extract()[0]
 
-        #使用itemloader
-        itemloader = ItemLoader(item=ArticleItem(), response=response)
-        #itemloader.add_css("title","")
-        #itemloader.add_xpath("","")
-        #itemloader.add_value("","")
+        # 使用itemloader
+        itemloader = ArticleItemLoader(item=ArticleItem(), response=response)
+        itemloader.add_xpath("title", '//div[@class="entry-header"]/h1/text()')
+        itemloader.add_xpath("create_time", '//p[@class="entry-meta-hide-on-mobile"]/text()')
+        itemloader.add_xpath("article_content", '//div[@class="entry"]')
+        itemloader.add_value("article_url", response.url)
+        itemloader.add_value("article_img", [response.meta.get("article_img", "")])
+        article_item = itemloader.load_item()
         yield article_item

@@ -17,12 +17,14 @@ class WebPipeline(object):
         return item
 
 
+#自定义图片下载
 class Article_ImagesPipeline(ImagesPipeline):
     def item_completed(self, results, item, info):
-        for k, v in results:
-            image_file_path = v["path"]
-            item["article_img"] = image_file_path
-            return item
+        if "article_img" in item:
+            for k, v in results:
+                image_file_path = v["path"]
+                item["article_img"] = image_file_path
+                return item
 
 
 # 自定义文件导出

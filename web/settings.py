@@ -9,6 +9,9 @@
 #     http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
 #     http://scrapy.readthedocs.org/en/latest/topics/spider-middleware.html
 import os
+import sys
+sys.path.insert("0", os.path.abspath('.'))
+sys.path.insert("0", os.path.abspath('..'))
 
 BOT_NAME = 'web'
 

@@ -11,6 +11,8 @@ from urlparse import urljoin
 from datetime import datetime
 from web.items import ArticleItem
 from web.items import ArticleItemLoader
+import hashlib
+
 
 
 class JobboleSpider(scrapy.Spider):
@@ -62,7 +64,9 @@ class JobboleSpider(scrapy.Spider):
         itemloader.add_xpath("title", '//div[@class="entry-header"]/h1/text()')
         itemloader.add_xpath("create_time", '//p[@class="entry-meta-hide-on-mobile"]/text()')
         itemloader.add_xpath("article_content", '//div[@class="entry"]')
+        itemloader.add_xpath("article_tags", '//p[@class="entry-meta-hide-on-mobile"]/a/text()')
         itemloader.add_value("article_url", response.url)
+        itemloader.add_value("article_md5", hashlib.md5(response.url.encode('utf-8')).hexdigest())
         itemloader.add_value("article_img", [response.meta.get("article_img", "")])
         article_item = itemloader.load_item()
         yield article_item

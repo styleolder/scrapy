@@ -78,6 +78,6 @@ class MySQL_Twisted_Pipelines(object):
         print failure
 
     def db_insert(self, tx, item):
-        sql_insert = 'INSERT INTO jobbole(article_img,title,article_url,create_time,article_content) VALUES (%s,%s,%s,%s,%s)'
-        params = (item['article_img'], item['title'], item['article_url'], item['create_time'], item['article_content'])
+        sql_insert = 'INSERT INTO jobbole(article_img,title,article_url,create_time,article_content,article_tags,article_md5) VALUES (%s,%s,%s,%s,%s,%s,%s)'
+        params = (item['article_img'], item['title'], item['article_url'], item['create_time'], item['article_content'],item['article_tags'], item['article_md5'])
         tx.execute(sql_insert, params)

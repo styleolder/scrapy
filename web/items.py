@@ -40,7 +40,6 @@ def tags_format(value):
 
 
 class Article_Join(Join):
-
     def __init__(self, separator=u' '):
         self.separator = separator
 
@@ -50,6 +49,7 @@ class Article_Join(Join):
         except Exception as e:
             print e
         return self.separator.join(values)
+
 
 class ArticleItem(scrapy.Item):
     article_img = scrapy.Field(
@@ -66,3 +66,15 @@ class ArticleItem(scrapy.Item):
         input_processor=MapCompose(tags_format),
         output_processor=Article_Join(',')
     )
+
+
+class LaGouItemLoader(ItemLoader):
+    default_output_processor = TakeFirst()
+
+
+class LaGouItem(scrapy.Item):
+    lagou_title = scrapy.Field()
+    lagou_url = scrapy.Field()
+    lagou_job_type = scrapy.Field()
+    lagou_create_time = scrapy.Field()
+    lagou_desc = scrapy.Field()

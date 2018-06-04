@@ -5,11 +5,12 @@
 # For simplicity, this file contains only settings considered important or
 # commonly used. You can find more settings consulting the documentation:
 #
-#     http://doc.scrapy.org/en/latest/topics/settings.html
+# http://doc.scrapy.org/en/latest/topics/settings.html
 #     http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
 #     http://scrapy.readthedocs.org/en/latest/topics/spider-middleware.html
 import os
 import sys
+
 sys.path.insert(0, os.path.abspath('.'))
 sys.path.insert(0, os.path.abspath('..'))
 
@@ -18,9 +19,9 @@ BOT_NAME = 'web'
 SPIDER_MODULES = ['web.spiders']
 NEWSPIDER_MODULE = 'web.spiders'
 # 全局设置下载等待时间
-DOWMLOAD_DELY = 0.75
+DOWMLOAD_DELY = 1.25
 # 是否保存cookies
-COOKIES_ENABLED = True
+COOKIES_ENABLED = False
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 # USER_AGENT = 'web (+http://www.yourdomain.com)'
 
@@ -77,7 +78,7 @@ SPIDER_MIDDLEWARES = {
 ITEM_PIPELINES = {
     'web.pipelines.WebPipeline': 300,
     # 'scrapy.pipelines.images.ImagesPipeline': 1,
-    'web.pipelines.Article_ImagesPipeline': 1,
+    # 'web.pipelines.Article_ImagesPipeline': 1,
     # 'web.pipelines.Article_JsonPipeline': 2
     'web.pipelines.MySQL_Twisted_Pipelines': 10
 }
@@ -146,4 +147,4 @@ MY_USER_AGENT = [
     "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.64 Safari/537.11",
     "Mozilla/5.0 (X11; U; Linux x86_64; zh-CN; rv:1.9.2.10) Gecko/20100922 Ubuntu/10.10 (maverick) Firefox/3.6.10",
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36",
-    ]
+]

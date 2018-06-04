@@ -70,3 +70,4 @@ class JobboleSpider(scrapy.Spider):
         itemloader.add_value("article_img", [response.meta.get("article_img", "")])
         article_item = itemloader.load_item()
         yield article_item
+

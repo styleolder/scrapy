@@ -70,14 +70,15 @@ class MySQL_Twisted_Pipelines(object):
         return cls(dbpool)  # 相当于dbpool付给了这个类，self中可以得到
 
     def process_item(self, item, spider):
-        query = self.dbpool.runInteraction(self.db_insert, item)
-        query.addErrback(self.handle_error)
+        query = self.dbpool.runInteraction(self.do_insert, item)
+        query.addErrback(self.handle_error, item, spider)
         return item
 
-    def handle_error(self, failure):
-        print failure
+    def do_insert(self, cursor, item):
+        # 执行具体的插入
+        # 根据不同的item 构建不同的sql语句并插入到mysql中
+        insert_sql, params = item.get_insert_sql()
+        cursor.execute(insert_sql, params)
 
-    def db_insert(self, tx, item):
-        sql_insert = 'INSERT INTO jobbole(article_img,title,article_url,create_time,article_content,article_tags,article_md5) VALUES (%s,%s,%s,%s,%s,%s,%s)'
-        params = (item['article_img'], item['title'], item['article_url'], item['create_time'], item['article_content'],item['article_tags'], item['article_md5'])
-        tx.execute(sql_insert, params)
+    def handle_error(self, failure, item, spider):
+        print failure

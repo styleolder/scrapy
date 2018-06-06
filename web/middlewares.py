@@ -6,9 +6,7 @@
 # http://doc.scrapy.org/en/latest/topics/spider-middleware.html
 
 from scrapy import signals
-from scrapy.downloadermiddlewares.useragent import UserAgentMiddleware
-import random
-
+from web.utils.xicidaili import GetIP
 
 class WebSpiderMiddleware(object):
     # Not all methods need to be defined. If a method is not defined,
@@ -56,3 +54,8 @@ class WebSpiderMiddleware(object):
 
     def spider_opened(self, spider):
         spider.logger.info('Spider opened: %s' % spider.name)
+
+
+class RandomIpSpiderMiddleware(object):
+    def process_request(self, request, spider):
+        request.meta['proxy'] = GetIP.get_random_ip()

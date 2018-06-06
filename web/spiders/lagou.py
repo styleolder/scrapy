@@ -10,6 +10,7 @@ class LagouSpider(CrawlSpider):
     start_urls = ['https://www.lagou.com/']
 
     #LinkExtractor allow允许访问的域名
+    #重新定义每一个爬虫的settings，会覆盖全局settings
     custom_settings = {
         "COOKIES_ENABLED": False,
         "DOWNLOAD_DELAY": 1,

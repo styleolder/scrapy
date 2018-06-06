@@ -14,7 +14,7 @@ cursor = conn.cursor()
 def crawl_ips():
     # 爬取西刺的免费ip代理
     headers = {"User-Agent": "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:52.0) Gecko/20100101 Firefox/52.0"}
-    for i in range(500):
+    for i in range(10):
         re = requests.get("http://www.xicidaili.com/nn/{0}".format(i), headers=headers)
 
         selector = Selector(text=re.text)
@@ -69,8 +69,8 @@ class GetIP(object):
         else:
             code = response.status_code
             if code >= 200 and code < 300:
-                print "ok ip========{0}{1}{2}".format(proxy_type, ip, port)
-                return False
+                print "ok ip========{0},{1},{2}".format(proxy_type, ip, port)
+                return True
             else:
                 print "invalid ip and port"
                 self.delete_ip(ip)
@@ -81,7 +81,7 @@ class GetIP(object):
         # 从数据库中随机获取一个可用的ip
         random_sql = """
               SELECT ip, port,proxy_type FROM xicidaili
-            ORDER BY RAND()
+            ORDER BY add_time,id desc
             LIMIT 1
             """
         cursor.execute(random_sql)
@@ -99,9 +99,9 @@ class GetIP(object):
 
 if __name__ == "__main__":
     # crawl_ips()
-    p = Pool(10)
+    p = Pool(60)
     get_ip = GetIP()
-    for i in range(10):
+    for i in range(60):
         p.apply_async(get_ip.get_random_ip(), args=(i,))
     p.close()
     p.join()

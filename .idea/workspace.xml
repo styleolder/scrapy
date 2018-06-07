@@ -2,13 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="259b485f-f1ba-481b-a060-b0b87ef36fed" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/web/utils/Chorme_se.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/spiders/jobbole.py" afterPath="$PROJECT_DIR$/web/spiders/jobbole.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.py" afterPath="$PROJECT_DIR$/main.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/middlewares.py" afterPath="$PROJECT_DIR$/web/middlewares.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/settings.py" afterPath="$PROJECT_DIR$/web/settings.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/utils/xicidaili.py" afterPath="$PROJECT_DIR$/web/utils/xicidaili.py" />
     </list>
     <ignored path="web.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -73,11 +68,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="jobbole.py" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="jobbole.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/web/spiders/jobbole.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.65966386" vertical-offset="496" max-vertical-offset="2403">
-              <caret line="30" column="0" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="226" max-vertical-offset="2403">
+              <caret line="83" column="0" selection-start-line="83" selection-start-column="0" selection-end-line="83" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -95,11 +90,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="middlewares.py" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="middlewares.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/web/middlewares.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-18.04" vertical-offset="1493" max-vertical-offset="2106">
-              <caret line="72" column="78" selection-start-line="72" selection-start-column="78" selection-end-line="72" selection-end-column="78" />
+            <state vertical-scroll-proportion="0.76053214" vertical-offset="1520" max-vertical-offset="2214">
+              <caret line="69" column="44" selection-start-line="69" selection-start-column="44" selection-end-line="69" selection-end-column="44" />
               <folding>
                 <element signature="e#168#194#0" expanded="true" />
               </folding>
@@ -166,8 +161,8 @@
         <option value="$PROJECT_DIR$/web/utils/Chorme_se.py" />
         <option value="$PROJECT_DIR$/main.py" />
         <option value="$PROJECT_DIR$/web/settings.py" />
-        <option value="$PROJECT_DIR$/web/middlewares.py" />
         <option value="$PROJECT_DIR$/web/spiders/jobbole.py" />
+        <option value="$PROJECT_DIR$/web/middlewares.py" />
       </list>
     </option>
   </component>
@@ -629,7 +624,11 @@
       <created>1528274540431</created>
       <updated>1528274540431</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="2018-06-07selenium集成进scrapy，重写download与信号量的控制">
+      <created>1528360511198</created>
+      <updated>1528360511198</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TodoView" selected-index="0">
@@ -722,7 +721,8 @@
     <MESSAGE value="2018-06-05安装pip install scrapy-fake-useragent 添加到MIDDLEWARES，实现自动切换UA" />
     <MESSAGE value="2018-06-06爬取代理，爬取拉钩" />
     <MESSAGE value="2018-06-06v1" />
-    <option name="LAST_COMMIT_MESSAGE" value="2018-06-06v1" />
+    <MESSAGE value="2018-06-07selenium集成进scrapy，重写download与信号量的控制" />
+    <option name="LAST_COMMIT_MESSAGE" value="2018-06-07selenium集成进scrapy，重写download与信号量的控制" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1101,16 +1101,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/web/middlewares.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-18.04" vertical-offset="1493" max-vertical-offset="2106">
-          <caret line="72" column="78" selection-start-line="72" selection-start-column="78" selection-end-line="72" selection-end-column="78" />
-          <folding>
-            <element signature="e#168#194#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/web/spiders/lagou.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="81" max-vertical-offset="1458">
@@ -1121,9 +1111,19 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/web/spiders/jobbole.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.65966386" vertical-offset="496" max-vertical-offset="2403">
-          <caret line="30" column="0" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="226" max-vertical-offset="2403">
+          <caret line="83" column="0" selection-start-line="83" selection-start-column="0" selection-end-line="83" selection-end-column="0" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/middlewares.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.76053214" vertical-offset="1520" max-vertical-offset="2214">
+          <caret line="69" column="44" selection-start-line="69" selection-start-column="44" selection-end-line="69" selection-end-column="44" />
+          <folding>
+            <element signature="e#168#194#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

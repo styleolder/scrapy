@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import sys
-
 reload(sys)
 sys.setdefaultencoding('utf8')
 
@@ -12,7 +11,11 @@ from datetime import datetime
 from web.items import ArticleItem
 from web.items import ArticleItemLoader
 import hashlib
-
+from selenium import webdriver
+from scrapy.http import HtmlResponse
+import time
+from scrapy.xlib.pydispatch import dispatcher
+from scrapy import signals
 
 
 class JobboleSpider(scrapy.Spider):
@@ -21,6 +24,13 @@ class JobboleSpider(scrapy.Spider):
     start_urls = ['http://www.jobbole.com']
 
     # start_urls = ['http://python.jobbole.com/all-posts']
+    def __init__(self):
+        self.driver = webdriver.Chrome()
+        super(JobboleSpider, self).__init__()
+        dispatcher.connect(self.splider_close(), signals.spider_closed)
+
+    def splider_close(self):
+        self.driver.close()
 
     # 拼接出所有的URL地址
     def parse(self, response):

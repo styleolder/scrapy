@@ -81,7 +81,7 @@ class GetIP(object):
         # 从数据库中随机获取一个可用的ip
         random_sql = """
               SELECT ip, port,proxy_type FROM xicidaili
-            ORDER BY add_time,id desc
+            ORDER BY rand()
             LIMIT 1
             """
         cursor.execute(random_sql)

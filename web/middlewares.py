@@ -59,3 +59,15 @@ class WebSpiderMiddleware(object):
 class RandomIpSpiderMiddleware(object):
     def process_request(self, request, spider):
         request.meta['proxy'] = GetIP.get_random_ip()
+
+from selenium import webdriver
+from scrapy.http import HtmlResponse
+import time
+
+class JsPageSpiderMiddleware(object):
+    def process_request(self, request, spider):
+        if spider.name == 'jobbole':
+            spider.driver.get(request.url)
+            print request.url
+            time.sleep(3)
+            return HtmlResponse(url=spider.driver.current_url,body=spider.driver.page_source,encoding='utf-8')

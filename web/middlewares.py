@@ -7,6 +7,9 @@
 
 from scrapy import signals
 from web.utils.xicidaili import GetIP
+from scrapy.http import HtmlResponse
+import time
+
 
 class WebSpiderMiddleware(object):
     # Not all methods need to be defined. If a method is not defined,
@@ -60,18 +63,14 @@ class RandomIpSpiderMiddleware(object):
     def process_request(self, request, spider):
         request.meta['proxy'] = GetIP.get_random_ip()
 
-from selenium import webdriver
-from scrapy.http import HtmlResponse
-import time
-
 from pyvirtualdisplay import Display
 
 class JsPageSpiderMiddleware(object):
     def process_request(self, request, spider):
         if spider.name == 'jobbole':
-            display = Display(visible=0, size=(800, 600))
-            display.start()
-            spider.driver.get(request.url)
+            # display = Display(visible=0, size=(800, 600))
+            # display.start()
+            # spider.driver.get(request.url)
             print request.url
             time.sleep(3)
             return HtmlResponse(url=spider.driver.current_url,body=spider.driver.page_source,encoding='utf-8')

@@ -7,7 +7,6 @@ import scrapy
 import re
 from scrapy.http import Request
 from urlparse import urljoin
-from datetime import datetime
 from web.items import ArticleItem
 from web.items import ArticleItemLoader
 import hashlib
@@ -21,19 +20,31 @@ from scrapy import signals
 class JobboleSpider(scrapy.Spider):
     name = 'jobbole'
     allowed_domains = ['jobbole.com']
-    start_urls = ['http://www.jobbole.com']
+    start_urls = ['http://111.jobbole.com/11123']
 
-    # start_urls = ['http://python.jobbole.com/all-posts']
+    # def __init__(self):
+    #     self.driver = webdriver.Chrome()
+    #     super(JobboleSpider, self).__init__()
+    #     dispatcher.connect(self.splider_close(), signals.spider_closed)
+    #
+    # def splider_close(self):
+    #     self.driver.close()
+    #收集404所有页面
+    handle_httpstatus_list = [404]
+
     def __init__(self):
-        self.driver = webdriver.Chrome()
-        super(JobboleSpider, self).__init__()
-        dispatcher.connect(self.splider_close(), signals.spider_closed)
+        self.fail_urls = []
+        dispatcher.connect(self.handle_spider_closed, signals.spider_closed)
 
-    def splider_close(self):
-        self.driver.close()
+    def handle_spider_closed(self, spider, reason):
+        self.crawler.stats.set_value("failed_urls ", ",".join(self.fail_urls))
 
     # 拼接出所有的URL地址
     def parse(self, response):
+        if response.status == 404:
+            self.fail_urls.append(response.url)
+            self.crawler.stats.inc_value("failed_url_num")
+
         urls = response.xpath('//li[@class="menu-item"]/a/@href').extract()
         for url in urls:
             if re.match(".*jobbole\.com$", url):
@@ -42,7 +53,6 @@ class JobboleSpider(scrapy.Spider):
                 yield Request(url=url, callback=self.parse_url)
 
     def parse_url(self, response):
-        # def parse(self, response):
         post_divs = response.xpath('//div[@class="post floated-thumb"]')
         for post_div in post_divs:
             article_img = post_div.xpath('./div[@class="post-thumb"]/a/img/@src').extract_first()
@@ -55,21 +65,6 @@ class JobboleSpider(scrapy.Spider):
             yield Request(url=next_page_url, callback=self.parse_url)
 
     def parse_details(self, response):
-        article_item = ArticleItem()
-        # article_item['article_img'] = [response.meta.get("article_img", "")]
-        # article_item['title'] = response.xpath('//div[@class="entry-header"]/h1/text()').extract_first()
-        # article_item['article_url'] = response.url
-        # create_time = response.xpath(
-        #     '//p[@class="entry-meta-hide-on-mobile"]/text()').extract()[0].replace("·", "").strip()
-        # # create_time = response.css('p.entry-meta-hide-on-mobile').extract_first().strip().replace("·", "")
-        # try:
-        #     article_item['create_time'] = datetime.strptime(create_time, "%Y/%m/%d").date()
-        # except Exception as e:
-        #     article_item['create_time'] = datetime.now().date()
-        # # article_item['article_content'] = response.xpath("div.entry").extract()[0]
-        # article_item['article_content'] = response.xpath('//div[@class="entry"]').extract()[0]
-
-        # 使用itemloader
         itemloader = ArticleItemLoader(item=ArticleItem(), response=response)
         itemloader.add_xpath("title", '//div[@class="entry-header"]/h1/text()')
         itemloader.add_xpath("create_time", '//p[@class="entry-meta-hide-on-mobile"]/text()')

@@ -14,7 +14,7 @@ cursor = conn.cursor()
 def crawl_ips():
     # 爬取西刺的免费ip代理
     headers = {"User-Agent": "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:52.0) Gecko/20100101 Firefox/52.0"}
-    for i in range(10):
+    for i in range(5):
         re = requests.get("http://www.xicidaili.com/nn/{0}".format(i), headers=headers)
 
         selector = Selector(text=re.text)
@@ -34,13 +34,15 @@ def crawl_ips():
             ip_list.append((ip, port, proxy_type, speed))
 
         for ip_info in ip_list:
-            cursor.execute(
-                "insert xicidaili(ip, port, speed, proxy_type) VALUES('{0}', '{1}', {2}, 'HTTP')".format(
-                    ip_info[0], ip_info[1], ip_info[3]
+            try:
+                cursor.execute(
+                    "insert xicidaili(ip, port, speed, proxy_type) VALUES('{0}', '{1}', {2}, 'HTTP')".format(
+                        ip_info[0], ip_info[1], ip_info[3]
+                    )
                 )
-            )
-
-            conn.commit()
+                conn.commit()
+            except Exception as e:
+                print e
 
 
 class GetIP(object):
@@ -98,10 +100,10 @@ class GetIP(object):
 
 
 if __name__ == "__main__":
-    # crawl_ips()
-    p = Pool(60)
+    #crawl_ips()
+    p = Pool(20)
     get_ip = GetIP()
-    for i in range(60):
+    for i in range(20):
         p.apply_async(get_ip.get_random_ip(), args=(i,))
     p.close()
     p.join()

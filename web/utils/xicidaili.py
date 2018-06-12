@@ -14,7 +14,7 @@ cursor = conn.cursor()
 def crawl_ips():
     # 爬取西刺的免费ip代理
     headers = {"User-Agent": "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:52.0) Gecko/20100101 Firefox/52.0"}
-    for i in range(5):
+    for i in range(30):
         re = requests.get("http://www.xicidaili.com/nn/{0}".format(i), headers=headers)
 
         selector = Selector(text=re.text)
@@ -57,7 +57,7 @@ class GetIP(object):
 
     def judge_ip(self, ip, port, proxy_type):
         # 判断ip是否可用
-        http_url = "http://www.baidu.com"
+        http_url = "http://www.rkpass.cn/u.jsp?u=325746"
         proxy_url = "{0}://{1}:{2}".format(proxy_type, ip, port)
         try:
             proxy_dict = {
@@ -100,10 +100,10 @@ class GetIP(object):
 
 
 if __name__ == "__main__":
-    #crawl_ips()
-    p = Pool(20)
+    crawl_ips()
+    p = Pool(60)
     get_ip = GetIP()
-    for i in range(20):
+    for i in range(60):
         p.apply_async(get_ip.get_random_ip(), args=(i,))
     p.close()
     p.join()

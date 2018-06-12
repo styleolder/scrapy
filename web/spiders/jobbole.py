@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
 import sys
-reload(sys)
-sys.setdefaultencoding('utf8')
-
 import scrapy
 import re
 from scrapy.http import Request
@@ -15,6 +12,9 @@ from scrapy.http import HtmlResponse
 import time
 from scrapy.xlib.pydispatch import dispatcher
 from scrapy import signals
+
+reload(sys)
+sys.setdefaultencoding('utf8')
 
 
 class JobboleSpider(scrapy.Spider):
@@ -29,7 +29,7 @@ class JobboleSpider(scrapy.Spider):
     #
     # def splider_close(self):
     #     self.driver.close()
-    #收集404所有页面
+    # 收集404所有页面
     handle_httpstatus_list = [404]
 
     def __init__(self):
@@ -75,4 +75,3 @@ class JobboleSpider(scrapy.Spider):
         itemloader.add_value("article_img", [response.meta.get("article_img", "")])
         article_item = itemloader.load_item()
         yield article_item
-

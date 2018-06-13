@@ -61,16 +61,16 @@ class WebSpiderMiddleware(object):
 
 class RandomIpSpiderMiddleware(object):
     def process_request(self, request, spider):
-        request.meta['proxy'] = GetIP.get_random_ip()
+        request.meta['proxy'] = 'http://61.135.217.7'
 
-from pyvirtualdisplay import Display
+# from pyvirtualdisplay import Display
 
-class JsPageSpiderMiddleware(object):
-    def process_request(self, request, spider):
-        if spider.name == 'jobbole':
-            # display = Display(visible=0, size=(800, 600))
-            # display.start()
-            # spider.driver.get(request.url)
-            print request.url
-            time.sleep(3)
-            return HtmlResponse(url=spider.driver.current_url,body=spider.driver.page_source,encoding='utf-8')
+# class JsPageSpiderMiddleware(object):
+#     def process_request(self, request, spider):
+#         if spider.name == 'jobbole':
+#             # display = Display(visible=0, size=(800, 600))
+#             # display.start()
+#             # spider.driver.get(request.url)
+#             print request.url
+#             time.sleep(3)
+#             return HtmlResponse(url=spider.driver.current_url,body=spider.driver.page_source,encoding='utf-8')

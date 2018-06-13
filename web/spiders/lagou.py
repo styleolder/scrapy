@@ -39,8 +39,6 @@ class LagouSpider(CrawlSpider):
         return results
 
     def parse_item(self, response):
-
-
         itemloader = LaGouItemLoader(item=LaGouItem(), response=response)
         itemloader.add_xpath("lagou_title", '//div[@class="company"]/text()')
         itemloader.add_value("lagou_url", response.url)

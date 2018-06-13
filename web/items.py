@@ -11,6 +11,9 @@ import datetime
 from web.settings import SQL_DATETIME_FORMAT
 import re
 
+from web.utils.validate_ip import GetIP
+
+
 class WebItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
@@ -25,7 +28,7 @@ def date_convert(value):
     try:
         create_date = datetime.datetime.strptime(value.split(" ")[0], '%Y/%m/%d').date()
     except Exception as e:
-            create_date = datetime.datetime.now().date()
+        create_date = datetime.datetime.now().date()
     return create_date
 
 
@@ -77,8 +80,10 @@ class ArticleItem(scrapy.Item):
 
     def get_insert_sql(self):
         sql_insert = 'INSERT INTO jobbole(article_img,lagou_url,article_url,create_time,article_content,article_tags,article_md5) VALUES (%s,%s,%s,%s,%s,%s,%s)'
-        params = (self['article_img'], self['title'], self['article_url'], self['create_time'], self['article_content'], self['article_tags'], self['article_md5'])
+        params = (self['article_img'], self['title'], self['article_url'], self['create_time'], self['article_content'],
+                  self['article_tags'], self['article_md5'])
         return sql_insert, params
+
 
 class LaGouItemLoader(ItemLoader):
     default_output_processor = TakeFirst()
@@ -120,5 +125,23 @@ class LaGouItem(scrapy.Item):
             ).strftime(SQL_DATETIME_FORMAT)
 
         sql_insert = 'INSERT INTO lagou(lagou_title,lagou_url,lagou_job_type,lagou_create_time,lagou_desc) VALUES (%s,%s,%s,%s,%s) ON DUPLICATE KEY UPDATE lagou_create_time=VALUES(lagou_create_time) '
-        params = (self['lagou_title'], self['lagou_url'], self['lagou_job_type'], self['lagou_create_time'], self['lagou_desc'])
+        params = (
+        self['lagou_title'], self['lagou_url'], self['lagou_job_type'], self['lagou_create_time'], self['lagou_desc'])
         return sql_insert, params
+
+
+class XicidialiItem(scrapy.Item):
+    ip = scrapy.Field()
+    port = scrapy.Field()
+    addr = scrapy.Field()
+    proxy_type = scrapy.Field()
+    url = scrapy.Field()
+
+    def get_insert_sql(self):
+        get_ip = GetIP(self['port'], self['ip'], self['port'])
+        if get_ip.judge_ip:
+            sql_insert = 'INSERT INTO xicidaili(ip,port,addr,proxy_type,url) VALUES (%s,%s,%s,%s,%s)'
+            params = (self['ip'], self['port'], self['addr'], self['proxy_type'], self['url'])
+            return sql_insert, params
+        else:
+            return "", ""

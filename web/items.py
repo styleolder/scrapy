@@ -51,7 +51,7 @@ def tags_format2(value):
 
 
 class Article_Join(Join):
-    def __init__(self, separator=u' '):
+    def __init__(self, separator=u""):
         self.separator = separator
 
     def __call__(self, values):
@@ -75,7 +75,7 @@ class ArticleItem(scrapy.Item):
     article_md5 = scrapy.Field()
     article_tags = scrapy.Field(
         input_processor=MapCompose(tags_format),
-        output_processor=Article_Join(','),
+        output_processor=Article_Join(","),
     )
 
     def get_insert_sql(self):
@@ -138,7 +138,8 @@ class XicidialiItem(scrapy.Item):
     url = scrapy.Field()
 
     def get_insert_sql(self):
-        get_ip = GetIP(self['port'], self['ip'], self['port'])
+        get_ip = GetIP(proxy_type=self['proxy_type'], ip=self['ip'], port=self['port'])
+        print self['ip'], self['port'], self['addr'], self['proxy_type'], self['url']
         if get_ip.judge_ip:
             sql_insert = 'INSERT INTO xicidaili(ip,port,addr,proxy_type,url) VALUES (%s,%s,%s,%s,%s)'
             params = (self['ip'], self['port'], self['addr'], self['proxy_type'], self['url'])

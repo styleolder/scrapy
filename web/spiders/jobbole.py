@@ -20,7 +20,7 @@ sys.setdefaultencoding('utf8')
 class JobboleSpider(scrapy.Spider):
     name = 'jobbole'
     allowed_domains = ['jobbole.com']
-    start_urls = ['http://111.jobbole.com/11123']
+    start_urls = ['http://www.jobbole.com/']
 
     # def __init__(self):
     #     self.driver = webdriver.Chrome()

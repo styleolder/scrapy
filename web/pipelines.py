@@ -7,17 +7,17 @@
 from scrapy.pipelines.images import ImagesPipeline
 import codecs
 import json
-
+from web.models.es_type import ArticleType
 from twisted.enterprise import adbapi
 import MySQLdb.cursors
-
+from w3lib.html import remove_tags
 
 class WebPipeline(object):
     def process_item(self, item, spider):
         return item
 
 
-#自定义图片下载
+# 自定义图片下载
 class Article_ImagesPipeline(ImagesPipeline):
     def item_completed(self, results, item, info):
         if "article_img" in item:
@@ -85,3 +85,18 @@ class MySQL_Twisted_Pipelines(object):
 
     def handle_error(self, failure, item, spider):
         print failure
+
+
+class ElasticsearchPipeline(object):
+    # 将爬取的数据写入到es
+    def process_item(self, item, spider):
+        # 将item转化为es的对象
+        article = ArticleType()
+        article.article_img = item['article_img']
+        article.title = item['title']
+        article.article_url = item['article_url']
+        article.article_content = remove_tags(item['article_content'])
+        article.article_md5 = item['article_md5']
+        article.article_tags = item['article_tags']
+        article.save()
+        return item

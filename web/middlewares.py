@@ -59,9 +59,9 @@ class WebSpiderMiddleware(object):
         spider.logger.info('Spider opened: %s' % spider.name)
 
 
-class RandomIpSpiderMiddleware(object):
-    def process_request(self, request, spider):
-        request.meta['proxy'] = 'http://61.135.217.7'
+# class RandomIpSpiderMiddleware(object):
+#     def process_request(self, request, spider):
+#         request.meta['proxy'] = 'http://61.135.217.7'
 
 # from pyvirtualdisplay import Display
 

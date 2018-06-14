@@ -58,7 +58,7 @@ SPIDER_MIDDLEWARES = {
     'web.middlewares.WebSpiderMiddleware': 543,
     'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
     'scrapy_fake_useragent.middleware.RandomUserAgentMiddleware': 400,
-    'web.middlewares.RandomIpSpiderMiddleware': 399,
+    # 'web.middlewares.RandomIpSpiderMiddleware': 399,
 }
 
 # Enable or disable downloader middlewares
@@ -83,7 +83,8 @@ ITEM_PIPELINES = {
     # 'scrapy.pipelines.images.ImagesPipeline': 1,
     # 'web.pipelines.Article_ImagesPipeline': 1,
     # 'web.pipelines.Article_JsonPipeline': 2
-    'web.pipelines.MySQL_Twisted_Pipelines': 10
+    #'web.pipelines.MySQL_Twisted_Pipelines': 10
+    'web.pipelines.ElasticsearchPipeline': 10
 }
 IMAGES_URLS_FIELD = "article_img"
 IMAGES_STORE = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'images')

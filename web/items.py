@@ -50,18 +50,6 @@ def tags_format2(value):
         return value
 
 
-class Article_Join(Join):
-    def __init__(self, separator=u""):
-        self.separator = separator
-
-    def __call__(self, values):
-        try:
-            values = values.remove('')
-        except Exception as e:
-            print e
-        return self.separator.join(values)
-
-
 class ArticleItem(scrapy.Item):
     article_img = scrapy.Field(
         output_processor=MapCompose(return_img_value),
@@ -75,7 +63,7 @@ class ArticleItem(scrapy.Item):
     article_md5 = scrapy.Field()
     article_tags = scrapy.Field(
         input_processor=MapCompose(tags_format),
-        output_processor=Article_Join(","),
+        output_processor=Join(","),
     )
 
     def get_insert_sql(self):
@@ -96,7 +84,7 @@ class LaGouItem(scrapy.Item):
     lagou_create_time = scrapy.Field()
     lagou_desc = scrapy.Field(
         input_processor=MapCompose(tags_format2),
-        output_processor=Article_Join(','),
+        output_processor=Join(','),
     )
 
     def get_insert_sql(self):
@@ -126,7 +114,8 @@ class LaGouItem(scrapy.Item):
 
         sql_insert = 'INSERT INTO lagou(lagou_title,lagou_url,lagou_job_type,lagou_create_time,lagou_desc) VALUES (%s,%s,%s,%s,%s) ON DUPLICATE KEY UPDATE lagou_create_time=VALUES(lagou_create_time) '
         params = (
-        self['lagou_title'], self['lagou_url'], self['lagou_job_type'], self['lagou_create_time'], self['lagou_desc'])
+            self['lagou_title'], self['lagou_url'], self['lagou_job_type'], self['lagou_create_time'],
+            self['lagou_desc'])
         return sql_insert, params
 
 

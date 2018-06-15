@@ -10,7 +10,9 @@ import json
 from web.models.es_type import ArticleType
 from twisted.enterprise import adbapi
 import MySQLdb.cursors
+from elasticsearch_dsl import connections
 from w3lib.html import remove_tags
+
 
 class WebPipeline(object):
     def process_item(self, item, spider):
@@ -87,6 +89,26 @@ class MySQL_Twisted_Pipelines(object):
         print failure
 
 
+def gen_suggests(index, info_tuple):
+    suggests = []
+    analyzed_words = set()
+    for text, weight in info_tuple:
+        if text:
+            # 调用ES的分析器，进行分词
+            es = connections.connections.create_connection(hosts=['192.168.1.13:9200'], sniff_on_start=True)
+            result = es.indices.analyze(index=index, body={'text': text, 'analyzer': "ik_max_word"},
+                                        params={'filter': ["lowercase"]})
+            for i in result['tokens']:
+                if len(i) > 1:
+                    analyzed_words.add(i['token'])
+            new_words = list(analyzed_words)
+        else:
+            new_words = []
+        if new_words:
+            suggests.append({"input": new_words, "weight": weight})
+    return suggests
+
+
 class ElasticsearchPipeline(object):
     # 将爬取的数据写入到es
     def process_item(self, item, spider):
@@ -98,5 +120,9 @@ class ElasticsearchPipeline(object):
         article.article_content = remove_tags(item['article_content'])
         article.article_md5 = item['article_md5']
         article.article_tags = item['article_tags']
+        article.suggest = gen_suggests(index=ArticleType._doc_type.index,
+                                       info_tuple=(
+                                           (article.title, 8), (article.article_content, 5),
+                                       ))
         article.save()
         return item

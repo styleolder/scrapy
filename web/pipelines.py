@@ -122,6 +122,7 @@ class ElasticsearchPipeline(object):
         article.article_tags = item['article_tags']
         article.suggest = gen_suggests(index=ArticleType._doc_type.index,
                                        info_tuple=(
+                                           (article.article_tags, 10),
                                            (article.title, 8), (article.article_content, 5),
                                        ))
         article.save()

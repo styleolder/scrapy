@@ -22,10 +22,10 @@ class XicidailiSpider(CrawlSpider):
         Rule(LinkExtractor(allow=r'nn/'), follow=True),
         Rule(LinkExtractor(allow=r'wn/'), follow=True),
         Rule(LinkExtractor(allow=r'wt/'), follow=True),
-        Rule(LinkExtractor(allow=r'nt/[123456789]'), callback='parse_item', follow=True),
-        Rule(LinkExtractor(allow=r'nt/[123456789]'), callback='parse_item', follow=True),
-        Rule(LinkExtractor(allow=r'wt/[123456789]'), callback='parse_item', follow=True),
-        Rule(LinkExtractor(allow=r'wn/[123456789]'), callback='parse_item', follow=True),
+        Rule(LinkExtractor(allow=r'nt/[12]'), callback='parse_item', follow=True),
+        Rule(LinkExtractor(allow=r'nt/[12]'), callback='parse_item', follow=True),
+        Rule(LinkExtractor(allow=r'wt/[12]'), callback='parse_item', follow=True),
+        Rule(LinkExtractor(allow=r'wn/[12]'), callback='parse_item', follow=True),
     )
 
     def parse_start_url(self, response):

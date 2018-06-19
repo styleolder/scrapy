@@ -84,7 +84,7 @@ ITEM_PIPELINES = {
     # 'web.pipelines.Article_ImagesPipeline': 1,
     # 'web.pipelines.Article_JsonPipeline': 2
     #'web.pipelines.MySQL_Twisted_Pipelines': 10
-    'web.pipelines.ElasticsearchPipeline': 10
+     'web.pipelines.ElasticsearchPipeline': 10
 }
 IMAGES_URLS_FIELD = "article_img"
 IMAGES_STORE = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'images')

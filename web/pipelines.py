@@ -91,8 +91,9 @@ class MySQL_Twisted_Pipelines(object):
 
 def gen_suggests(index, info_tuple):
     suggests = []
-    analyzed_words = set()
+    used_words = set()
     for text, weight in info_tuple:
+        analyzed_words = set()
         if text:
             # 调用ES的分析器，进行分词
             es = connections.connections.create_connection(hosts=['192.168.1.13:9200'], sniff_on_start=True)
@@ -101,7 +102,8 @@ def gen_suggests(index, info_tuple):
             for i in result['tokens']:
                 if len(i) > 1:
                     analyzed_words.add(i['token'])
-            new_words = list(analyzed_words)
+            new_words = list(analyzed_words - used_words)
+            used_words = analyzed_words
         else:
             new_words = []
         if new_words:
@@ -120,6 +122,7 @@ class ElasticsearchPipeline(object):
         article.article_content = remove_tags(item['article_content'])
         article.article_md5 = item['article_md5']
         article.article_tags = item['article_tags']
+        article.create_time = item['create_time']
         article.suggest = gen_suggests(index=ArticleType._doc_type.index,
                                        info_tuple=(
                                            (article.article_tags, 10),

@@ -6,40 +6,55 @@ import MySQLdb
 
 conn = MySQLdb.connect(host="192.168.1.12", user="root", passwd="l2cplat123456", db="scrapy", charset="utf8")
 cursor = conn.cursor()
+headers = {
+    'Accept': 'text/html, application/xhtml+xml, image/jxr, */*',
+    'Accept - Encoding': 'gzip, deflate',
+    'Accept-Language': 'zh-Hans-CN, zh-Hans; q=0.5',
+    'Connection': 'Keep-Alive',
+    'Host': 'www.vyuanjy.com/',
+    'Referer': 'http://www.vyuanjy.com/plugin.php?id=tom_weixin_zl&act_id=1&zlkey=11&from=timeline&prand=762',
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36 Edge/15.15063'}
 
 
 class GetIP(object):
-    def delete_ip(self, ip):
+    def __init__(self,ip,port,proxy_type):
+        self.ip = ip
+        self.port = port
+        self.proxy_type = proxy_type
+
+    def delete_ip(self):
         # 从数据库中删除无效的ip
         delete_sql = """
             delete from xicidaili where ip='{0}'
-        """.format(ip)
-        cursor.execute(delete_sql)
-        conn.commit()
-        return True
+        """.format(self.ip)
+        try:
+            cursor.execute(delete_sql)
+            conn.commit()
+        except Exception as e:
+            pass
+        return False
 
-    def judge_ip(self, ip, port, proxy_type):
+    def judge_ip(self):
         # 判断ip是否可用
         http_url = "https://www.baidu.com"
-        proxy_url = "{0}://{1}:{2}".format(proxy_type, ip, port)
+        proxy_url = "{0}://{1}:{2}".format(self.proxy_type, self.ip, self.port)
         try:
             proxy_dict = {
-                "http": proxy_url,
+                "http": self.proxy_url,
             }
-            response = requests.get(http_url, proxies=proxy_dict, timeout=2)
+            response = requests.get(http_url, proxies=proxy_dict, timeout=3, headers=headers)
         except Exception as e:
             print "invalid ip and port"
-            self.delete_ip(ip)
+            self.delete_ip(self.ip)
             return False
+        code = response.status_code
+        if code >= 200 and code < 300:
+            print "ok ip========{0},{1},{2}".format(self.proxy_type, self.ip, port)
+            return True
         else:
-            code = response.status_code
-            if code >= 200 and code < 300:
-                print "ok ip========{0},{1},{2}".format(proxy_type, ip, port)
-                return True
-            else:
-                print "invalid ip and port"
-                self.delete_ip(ip)
-                return False
+            print code
+            print "invalid ip and port"
+            self.delete_ip(self.ip)
 
     def count_ip(self):
         # 统计总数

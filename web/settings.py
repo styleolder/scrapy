@@ -19,7 +19,7 @@ BOT_NAME = 'web'
 SPIDER_MODULES = ['web.spiders']
 NEWSPIDER_MODULE = 'web.spiders'
 # 全局设置下载等待时间
-DOWMLOAD_DELY = 1.25
+DOWMLOAD_DELY = 3
 # 是否保存cookies
 COOKIES_ENABLED = False
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
@@ -58,7 +58,7 @@ SPIDER_MIDDLEWARES = {
     'web.middlewares.WebSpiderMiddleware': 543,
     'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
     'scrapy_fake_useragent.middleware.RandomUserAgentMiddleware': 400,
-    # 'web.middlewares.RandomIpSpiderMiddleware': 399,
+    #'web.middlewares.RandomIpSpiderMiddleware': 399,
 }
 
 # Enable or disable downloader middlewares

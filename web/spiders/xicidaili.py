@@ -18,8 +18,8 @@ class XicidailiSpider(scrapy.Spider):
     }
 
     def parse(self, response):
-        for i in range(1,10):
-            url = response.url+"/"+str(i)
+        for i in range(1, 30):
+            url = response.url + "/" + str(i)
             yield Request(url=url, callback=self.parse_item)
 
     def parse_item(self, response):

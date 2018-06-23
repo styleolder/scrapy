@@ -18,7 +18,7 @@ class XicidailiSpider(scrapy.Spider):
     }
 
     def parse(self, response):
-        for i in range(1, 30):
+        for i in range(1, 100):
             url = response.url + "/" + str(i)
             yield Request(url=url, callback=self.parse_item)
 

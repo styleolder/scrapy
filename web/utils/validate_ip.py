@@ -23,7 +23,7 @@ class GetIP(object):
             response = requests.get(http_url, proxies=proxy_dict, timeout=10, headers=self.headers)
             code = response.status_code
             print code
-            if code >= 200 and code < 300:
+            if code >= 200 and code <= 302:
                 print "ok ip========{0},{1},{2}".format(self.proxy_type, self.ip, self.port)
                 return True
             else:
